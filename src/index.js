@@ -1,12 +1,28 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { bindActionCreators } from 'redux';
+import { Provider, connect } from 'react-redux';
+
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import App from './Components/App';
+import store from './store';
+import * as actionCreators from './ActionCreators/actionCreators';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+function mapStateToProps(state) {
+    return {
+        temperature: state.temperature,
+        latitude: state.latitude,
+        longitude: state.longitude,
+        lastReceived: state.lastReceived
+    }
+}
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(actionCreators, dispatch)
+}
+
+const Main = connect(mapStateToProps, mapDispatchToProps)(App);
+
+console.log(store.getState());
+
+render(<Provider store={store}><Main /></Provider>, document.getElementById('root'));
