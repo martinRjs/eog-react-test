@@ -1,11 +1,14 @@
 export function rootReducer(state = {}, action) {
   switch (action.type) {
     case 'UPDATE':
+      const { temperature, latitude, longitude, lastReceived } = action.payload;
       return {
-        temperature: action.temperature,
-        latitute: action.latitute,
-        longitud: action.longitud,
-        lastUpdated: action.lastUpdated
+        currentTemperature: {
+          temperature,
+          latitude,
+          longitude,
+          lastReceived,
+        }
       };
     default:
       return state;

@@ -1,39 +1,30 @@
-import React from 'react';
-import Dashboard from './Dashboard'
+import React, { Component } from 'react';
+import DashboardContainer from './Dashboard'
 import '../App.css';
+import MapViewContainer from './MapView';
 
-class App extends React.Component {
-
-    onClick = () => {
-        this.props.store.dispatch({
-            type: 'UPDATE',
-            temperature: null,
-            latitute: null,
-            longitud: null,
-            lastUpdated: "Martin"
+class App extends Component {
+  componentDidMount() {
+    var self = this;
+    setInterval(() => {
+      fetch('https://react-assessment-api.herokuapp.com/api/drone')
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('dispatch UPDATE');
+          self.props.update(data.data.pop())
         })
-    }
+    }, 4000)
+  };
 
-    componentDidMount() {
-        console.log('component mounted . . .');
-    };
-
-    render() {
-        return (
-            <div className="App">
-                <header><h1>EOG Data Visualization</h1></header>
-                <nav>
-                    <ul>
-                        <li>Dashboard</li>
-                        <li>/</li>
-                        <li>Map</li>
-                    </ul>
-                </nav>
-                <Dashboard {...this.props}/>
-                <button onClick={this.onClick}>click me</button>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div className="App">
+        <header><h1>EOG Data Visualization</h1></header>
+        <MapViewContainer/>
+        <DashboardContainer/>
+      </div>
+    );
+  }
 }
 
 export default App;
